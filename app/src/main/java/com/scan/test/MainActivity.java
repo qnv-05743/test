@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         Call<List> call = apiService.getData("");
         call.enqueue(new Callback<List>() {
             @Override
+
             public void onResponse(Call<List> call, Response<List> response) {
                 java.util.List listData = (java.util.List) response.body();
                 for (int i = 0; i < listData.size(); i++) {
