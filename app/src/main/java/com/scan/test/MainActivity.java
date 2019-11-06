@@ -9,12 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.scan.test.adapter.EmployesAdapter;
-import com.scan.test.model.Employes;
+import com.scan.test.adapter.DataAdapter;
+import com.scan.test.model.List;
 import com.scan.test.service.APIService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,12 +24,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager mLayoutManager;
-
+    private Retrofit retrofit;
     private Button button;
-    private ArrayList<Employes> employesArrayList;
-    private EmployesAdapter employesAdapter;
+    private ArrayList<List> listDataArrayList;
+    private DataAdapter dataAdapter;
     String TAG = MainActivity.class.getSimpleName();
-    String URL_GET_PRODUCT = "http://dummy.restapiexample.com/";
+    String URL_GET = "http://192.168.200.254/testapi/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,38 +47,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAllProduct() {
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL_GET_PRODUCT)
+                .baseUrl(URL_GET)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         APIService apiService = retrofit.create(APIService.class);
-        Call<List<Employes>> call = apiService.getAllProduct();
-        call.enqueue(new Callback<List<Employes>>() {
+        Call<List> call = apiService.getData("");
+        call.enqueue(new Callback<List>() {
             @Override
-            public void onResponse(Call<List<Employes>> call, Response<List<Employes>> response) {
-                List<Employes> productsList = response.body();
-                for (int i = 0; i < productsList.size(); i++) {
-                    employesArrayList.add(productsList.get(i));
-                    Log.d(TAG, "onResponse" + productsList.get(i).toString());
+            public void onResponse(Call<List> call, Response<List> response) {
+                java.util.List listData = (java.util.List) response.body();
+                for (int i = 0; i < listData.size(); i++) {
+                    listDataArrayList.add(listDataArrayList.get(i));
+                    Log.d("TAG", "onResponse" + listData.get(i).toString());
                 }
-                employesAdapter.notifyDataSetChanged();
+                dataAdapter.notifyDataSetChanged();
+
+
             }
 
             @Override
-            public void onFailure(Call<List<Employes>> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+            public void onFailure(Call<List> call, Throwable t) {
+
             }
         });
     }
-
 
     private void addControl() {
         recyclerView.setHasFixedSize(true);
         // Create 2 col
         mLayoutManager = new GridLayoutManager(MainActivity.this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
-        employesArrayList = new ArrayList<>();
-        employesAdapter = new EmployesAdapter(employesArrayList, MainActivity.this);
-        recyclerView.setAdapter(employesAdapter);
+        listDataArrayList = new ArrayList<>();
+        dataAdapter = new DataAdapter(listDataArrayList, MainActivity.this);
+        recyclerView.setAdapter(dataAdapter);
     }
 }
