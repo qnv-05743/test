@@ -12,22 +12,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.scan.test.R;
-import com.scan.test.model.List;
+import com.scan.test.model.ListData;
 import com.scan.test.onClickListener.itemOnClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ShowHolder> {
-    private java.util.List dataList;
+    private List<ListData> dataList;
     private Context context;
     private itemOnClickListener itemClickListeners;
+
+
 
     public void setItemClickListeners(itemOnClickListener itemClickListeners) {
         this.itemClickListeners = itemClickListeners;
     }
 
-    public DataAdapter(ArrayList<List> dataList, Context context) {
-        this.dataList = dataList;
+    public DataAdapter(List<ListData> dataListData, Context context) {
+        this.dataList = dataListData;
         this.context = context;
     }
 
@@ -41,10 +44,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ShowHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ShowHolder holder, int position) {
-        List list = (List) dataList.get(position);
-        holder.tv_title.setText(list.getTitle());
-        holder.tv_detail.setText(list.getContent());
-        Glide.with(context).load(list.getThumb())
+        ListData listData = (ListData) dataList.get(position);
+        holder.tv_title.setText(listData.getTitle());
+        holder.tv_detail.setText(listData.getContent());
+        Glide.with(context).load(listData.getThumb())
                 .override(150, 150).into(holder.image_title);
     }
 

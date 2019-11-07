@@ -4,6 +4,8 @@ package com.scan.test.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class Data {
 
     @SerializedName("status")
@@ -14,7 +16,8 @@ public class Data {
     private String mgs;
     @SerializedName("listData")
     @Expose
-    private java.util.List<List> listData = null;
+
+    private java.util.List<ListData> list = null;
 
     public Integer getStatus() {
         return status;
@@ -32,12 +35,12 @@ public class Data {
         this.mgs = mgs;
     }
 
-    public java.util.List<List> getListData() {
-        return listData;
+    public java.util.List<ListData> getListData() {
+        return list;
     }
 
-    public void setListData(java.util.List<List> listData) {
-        this.listData = listData;
+    public void setListData(java.util.List<ListData> listData) {
+        this.list = listData;
     }
 
 }

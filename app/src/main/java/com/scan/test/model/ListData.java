@@ -4,7 +4,7 @@ package com.scan.test.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class List {
+public class ListData {
 
     @SerializedName("id")
     @Expose
