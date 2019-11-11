@@ -8,7 +8,7 @@ public class ListData {
 
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private int id;
     @SerializedName("title")
     @Expose
     private String title;
@@ -18,9 +18,6 @@ public class ListData {
     @SerializedName("content")
     @Expose
     private String content;
-
-
-
     public Integer getId() {
         return id;
     }

@@ -5,25 +5,24 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Data {
-
+public class Data  {
     @SerializedName("status")
     @Expose
-    private Integer status;
+    private int status;
     @SerializedName("mgs")
     @Expose
     private String mgs;
-    @SerializedName("listData")
+    @SerializedName("list")
     @Expose
+    private List<ListData> list;
 
-    private java.util.List<ListData> list = null;
-
-    public Integer getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -35,12 +34,11 @@ public class Data {
         this.mgs = mgs;
     }
 
-    public java.util.List<ListData> getListData() {
+    public List<ListData> getList() {
         return list;
     }
 
-    public void setListData(java.util.List<ListData> listData) {
-        this.list = listData;
+    public void setList(List<ListData> list) {
+        this.list = list;
     }
-
 }

@@ -15,14 +15,12 @@ import com.scan.test.R;
 import com.scan.test.model.ListData;
 import com.scan.test.onClickListener.itemOnClickListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ShowHolder> {
     private List<ListData> dataList;
     private Context context;
     private itemOnClickListener itemClickListeners;
-
 
 
     public void setItemClickListeners(itemOnClickListener itemClickListeners) {
@@ -38,17 +36,18 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ShowHolder> {
     @Override
     public ShowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview, parent, false);
-
+        //setItemClickListeners(itemClickListeners);
         return new ShowHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ShowHolder holder, int position) {
-        ListData listData = (ListData) dataList.get(position);
+        ListData listData = dataList.get(position);
         holder.tv_title.setText(listData.getTitle());
-        holder.tv_detail.setText(listData.getContent());
         Glide.with(context).load(listData.getThumb())
                 .override(150, 150).into(holder.image_title);
+        holder.tv_detail.setText(listData.getContent());
+
     }
 
     @Override
