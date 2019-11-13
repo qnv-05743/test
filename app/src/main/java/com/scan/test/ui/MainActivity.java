@@ -1,17 +1,17 @@
-package com.scan.test;
+package com.scan.test.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.scan.test.R;
 import com.scan.test.adapter.DataAdapter;
-import com.scan.test.model.Data;
 import com.scan.test.model.DataObj;
 import com.scan.test.model.ListData;
 import com.scan.test.service.APIClient;
@@ -28,25 +28,29 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager mLayoutManager;
-    private Button button;
-    private ArrayList<ListData> listDataArrayListData;
     private DataAdapter dataAdapter;
-    String TAG = MainActivity.class.getSimpleName();
+    private List<ListData> dataList;
+    private ProgressBar progressBar;
 
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.recycler_view);
-        //button = findViewById(R.id.btn_get);
-        addControl();
+        progressBar = findViewById(R.id.progress);
+        progressBar.setVisibility(View.GONE);
+        toolbar = findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+
         getData();
+        addControl();
     }
 
 
     private void getData() {
-
+        progressBar.setVisibility(View.VISIBLE);
         final APIService apiService = APIClient.self().getRetrofit().create(APIService.class);
         long timeDate = System.currentTimeMillis();
         String token = Utils.md5("" + (timeDate / 1000));
@@ -55,22 +59,22 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<DataObj>() {
             @Override
             public void onResponse(Call<DataObj> call, Response<DataObj> response) {
-                Data data = response.body().getData();
-                if (data != null && data.getList() != null && !data.getList().isEmpty()) {
-                    for (int i = 0; i < data.getList().size(); i++) {
-                        data.getList().add(listDataArrayListData.get(i));
-                    }
-                    addControl();
-                    dataAdapter.notifyDataSetChanged();
-                    Toast.makeText(MainActivity.this, "List : " + " " + response.body().getData().getList().size(), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                if (response.isSuccessful()) {
+                    dataList.clear();
+                    dataList.addAll(response.body().getData().getList());
                 }
+                dataAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Call<DataObj> call, Throwable t) {
+                progressBar.setVisibility(View.VISIBLE);
                 Toast.makeText(MainActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
 
@@ -78,9 +82,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(MainActivity.this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
-        listDataArrayListData = new ArrayList<>();
-        dataAdapter = new DataAdapter(listDataArrayListData, MainActivity.this);
+        dataList = new ArrayList<>();
+        dataAdapter = new DataAdapter(dataList, MainActivity.this);
         recyclerView.setAdapter(dataAdapter);
-
     }
 }
